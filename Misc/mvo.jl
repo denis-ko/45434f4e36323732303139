@@ -6,7 +6,6 @@
 #=
 Pkg.add("Convex")
 Pkg.add("ECOS")
-Pkg.add("JLD2")
 Pkg.add("LaTeXStrings")
 Pkg.add("Plots")
 =#
