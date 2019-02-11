@@ -18,8 +18,7 @@ include("Common/io.jl");
 # Download data from Yahoo Finance
 #--------------------------------------------------------------------------
 
-using FileIO, JLD2
-using .FinData, .IO
+using .FinData
 
 symbols = [:GOOG, :CSCO, :DVN, :BAC, :BA,
            :AAPL, :MSFT, :PFE, :MMM, :GE,
@@ -28,19 +27,14 @@ symbols = [:GOOG, :CSCO, :DVN, :BAC, :BA,
 
 p = Yahoo.getprices(symbols, "2015-01-01", "2018-12-31", int = :mo);
 
-# Save data into a JLD2 file
-path = chkdir("Data")
-save("$path/prices.jld2", "p", p);
-
 #--------------------------------------------------------------------------
 # Efficient frontier
 #--------------------------------------------------------------------------
 
 using Distributions, Statistics
-using DataFrames, JLD2, LaTeXStrings, Plots
+using DataFrames, FileIO, LaTeXStrings, Plots
 using Convex, ECOS
 
-p = load("Data/prices.jld2", "p");
 c = unstack(p, :Date, :Symbol, :Close);
 sort!(c, [:Date]);
 
