@@ -18,4 +18,15 @@ function run_avg(stepf, niter; seed = nothing)
     mapreduce(f, (a, b) -> a .+ b, 1:niter) ./ niter
 end
 
+function try_run_avg(stepf, niter; seed = nothing, maxiter = 10)
+    aux(i, j) = begin
+        if j > maxiter
+            error("Max number of iterations exceeded.")
+        end
+        try stepf(i) catch _ aux(i, j + 1) end
+    end
+
+    run_avg(i -> aux(i, 0), niter; seed = seed)
+end
+
 end

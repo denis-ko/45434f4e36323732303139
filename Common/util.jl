@@ -1,6 +1,12 @@
 module Util
 
-export flatten, maxby, minby
+using LinearAlgebra
+
+export eye, flatten, maxby, minby
+
+function eye(n)
+     Matrix(1.0I, n, n)
+end
 
 function flatten(x...)
      collect(Iterators.flatten(x))

@@ -3,7 +3,7 @@ module Regress
 export ols, iv, tsls, nls, quant, overid
 
 using Distributions, Match, Parameters
-using ForwardDiff, LinearAlgebra
+using ForwardDiff, LinearAlgebra, SparseArrays
 using Convex, ECOS, Optim
 
 @with_kw mutable struct Params
@@ -208,7 +208,7 @@ function quant(y::Vector, x::Matrix, τ::Float64, params::Params;
     x = !params.IncludeConst ? x : add_const(n, x)[1]
     v = Variable(2 * n + k)
     c = (o = ones(n); [τ * o; (1 - τ) * o; zeros(k)])
-    A = (e = speye(n); [e -e x])
+    A = [I -I sparse(x)]
 
     # Get estimates (LP optimization)
     p = minimize(c' * v)
